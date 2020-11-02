@@ -28,19 +28,19 @@ public class Menu {
 	public static void newCatMenu() {
 		System.out.println("Add a new cat here!");
 		System.out.println("Enter the new cat's name: ");
-		String catName = input.nextLine();
-		input.nextLine();
+		String catName = input.next();
+
 		System.out.println("Enter the breed of the cat: ");
-		String catBreed = input.nextLine();
-		
+		String catBreed = input.next();
+	
 		System.out.println("Enter the color of the cat's fur: ");
-		String catFurColor = input.nextLine();
+		String catFurColor = input.next();
 		
 		System.out.println("Enter the gender of the cat:  ");
-		String catGender = input.nextLine();
-	
+		String catGender = input.next();
+		
 		System.out.println("Enter the age of the cat: ");
-		int catAge = Integer.parseInt(input.nextLine());
+		int catAge = Integer.parseInt(input.next());
 		
 		Cat a = new Cat(catName, catBreed, catFurColor, catGender, catAge);
 		LogDaCats.LogIt("info", a.getName() +  " was created");
