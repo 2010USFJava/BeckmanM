@@ -8,7 +8,7 @@
 				</Pattern>
 			</PatternLayout>
 		</Console>
-		<File name="File" fileName="C:/Users/Isa Beckman/Documents/BankLog/logging.log">
+		<File name="File" fileName="C:/Users/Isa Beckman/Documents/BeckmanM Repository/BankApplication/logging.log">
 			<PatternLayout>
 				<Pattern>
 					[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
@@ -18,7 +18,7 @@
 		</File>
 	</Appenders>
 	<Loggers>
-		<Logger name="com.beckman.util.LogDis" level = "info" additivity= "false">
+		<Logger name="com.beckman.util.LogInfo" level = "info" additivity= "false">
 			<AppenderRef ref="Console"/>
 			<AppenderRef ref = "File"/>
 		</Logger>

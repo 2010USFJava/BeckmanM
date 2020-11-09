@@ -14,8 +14,21 @@ public class AdminAbility extends EmployeeAbility {
 	
 	static Scanner input = new Scanner(System.in);
 	
-	public static void createNewEmployee(String fname, String lname, String username, String password) {
-		new Employee(fname, lname, username, password);
+	public static void createNewEmployee() {
+		System.out.println("Employee First Name");
+		String fname = input.nextLine();
+		System.out.println("Employee Last Name");
+		String lname = input.nextLine();
+		System.out.println("Employee Username");
+		String username = input.nextLine();
+		System.out.println("Employee Password");
+		String password = input.nextLine();
+		
+		Employee e = new Employee(fname, lname, username, password);
+		UserInfo.employeeList.add(e);
+		UserServices.employeeLogin.containsKey(e.getUsername());
+		UserServices.employeeLogin.containsValue(e.getPassword());
+		LogInfo.LogIt("info", e.getFirstName() + e.getLastName() + " Has Been Added To Employee");
 	}
 	
 	public static void depositCustomer() {
@@ -74,9 +87,10 @@ public class AdminAbility extends EmployeeAbility {
 		System.out.println(UserInfo.customerList);
 		String custUsername = input.nextLine();
 		Customer cust = UserInfo.findCustomerByUsername(custUsername);
-		System.out.println(cust.toString() + " Was Deleted.");
 		UserInfo.customerList.remove(cust);
 		UserServices.customerLogin.remove(custUsername);
+		LogInfo.LogIt("info", cust.toString() + " Was Deleted");
+		System.out.println(cust.toString() + " Was Deleted.");
 		System.out.println(UserInfo.customerList);
 	}
 	

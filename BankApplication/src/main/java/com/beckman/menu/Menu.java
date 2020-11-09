@@ -17,7 +17,7 @@ public class Menu {
 	public static Scanner input = new Scanner(System.in);
 	
 	public static void mainMenu() {
-		System.out.println("Welcome to Da Bank!");
+		System.out.println("Welcome to IsaBank!");
 		System.out.println("Please Select From The Following Options: ");
 		System.out.println("\t 1-- If You Want To Register A New Account: Type 1 ");
 		System.out.println("\t 2-- If You Already Have An Account: Type 2 ");
@@ -395,7 +395,7 @@ public class Menu {
 				adminMenu();
 				break;
 			case 7:
-				AdminAbility.createNewEmployee("Joe", "Jam", "em11", "empass123");
+				AdminAbility.createNewEmployee();
 				adminMenu();
 				break;
 			case 0:

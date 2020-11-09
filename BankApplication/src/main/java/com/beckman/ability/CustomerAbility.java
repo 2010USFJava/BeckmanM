@@ -54,7 +54,7 @@ public class CustomerAbility implements Ability {
 		if(acctType.equals(AccountType.CHECKING)) {
 			if(balance >= 0) {
 				updateBal = balance + amount;
-				LogInfo.LogIt("info", cust.getUsername() + " " + cust.getAccountNumber() + " Successfully Deposited " + amount + " Into Your " + acctType );
+				LogInfo.LogIt("info", cust.getUsername() + " " + cust.getAccountNumber() + " Successfully Deposited " + amount + " Into " + acctType );
 				System.out.println("You Successfully Deposited " + amount + " Into Your " + acctType);
 				cust.setBalance(updateBal);
 				
@@ -63,14 +63,14 @@ public class CustomerAbility implements Ability {
 			if(balance >= 0) {
 				updateBal = balance + amount;
 				balance += amount;
-				LogInfo.LogIt("info", cust.getUsername() + " " + cust.getAccountNumber() + " Successfully Deposited " + amount + " Into Your " + acctType );
+				LogInfo.LogIt("info", cust.getUsername() + " " + cust.getAccountNumber() + " Successfully Deposited " + amount + " Into " + acctType );
 				System.out.println("You Successfully Deposited " + amount + " Into Your " + acctType);
 				cust.setBalance(updateBal);
 			}
 		}else if(acctType.equals(AccountType.JOINT)) {
 			if(balance >= 0) {
 				updateBal = balance + amount;
-				LogInfo.LogIt("info", cust.getUsername() + " " + cust.getAccountNumber() + " Successfully Deposited " + amount + " Into Your " + acctType );
+				LogInfo.LogIt("info", cust.getUsername() + " " + cust.getAccountNumber() + " Successfully Deposited " + amount + " Into " + acctType );
 				System.out.println("You Successfully Deposited " + amount + " Into Your " + acctType);
 				cust.setBalance(updateBal);
 			}
@@ -87,21 +87,21 @@ public class CustomerAbility implements Ability {
 			if(acctType.equals(AccountType.CHECKING)) {
 				if(balance >= amount) {
 					updateBal = balance - amount;
-					LogInfo.LogIt("info", cust.getUsername() + " " + cust.getAccountNumber() + " Successfully Withdrew " + amount + " Into Your " + acctType );
+					LogInfo.LogIt("info", cust.getUsername() + " " + cust.getAccountNumber() + " Successfully Withdrew " + amount + " Into " + acctType );
 					System.out.println("You Successfully Withdrew " + amount + " From Your " + acctType);
 					cust.setBalance(updateBal);
 				}
 			}else if(acctType.equals(AccountType.SAVING)) {
 				if(balance >= amount) {
 					updateBal = balance - amount;
-					LogInfo.LogIt("info", cust.getUsername() + " " + cust.getAccountNumber() + " Successfully Withdrew " + amount + " Into Your " + acctType );
+					LogInfo.LogIt("info", cust.getUsername() + " " + cust.getAccountNumber() + " Successfully Withdrew " + amount + " Into " + acctType );
 					System.out.println("You Successfully Withdrew " + amount + " From Your " + acctType);
 					cust.setBalance(updateBal);
 				}
 			}else if(acctType.equals(AccountType.JOINT)) {
 				if(balance >= amount) {
 					updateBal = balance - amount;
-					LogInfo.LogIt("info", cust.getUsername() + " " + cust.getAccountNumber() + " Successfully Withdrew " + amount + " Into Your " + acctType );
+					LogInfo.LogIt("info", cust.getUsername() + " " + cust.getAccountNumber() + " Successfully Withdrew " + amount + " Into " + acctType );
 					System.out.println("You Successfully Withdrew " + amount + " From Your " + acctType);
 					cust.setBalance(updateBal);
 				}
