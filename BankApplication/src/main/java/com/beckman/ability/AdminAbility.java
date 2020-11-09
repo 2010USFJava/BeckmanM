@@ -2,7 +2,6 @@ package com.beckman.ability;
 
 import java.util.Scanner;
 
-import com.beckman.services.GenerateAccountNumber;
 import com.beckman.services.UserInfo;
 import com.beckman.services.UserServices;
 import com.beckman.users.Ability.AccountType;

@@ -6,9 +6,7 @@ import com.beckman.ability.AdminAbility;
 import com.beckman.ability.CustomerAbility;
 import com.beckman.ability.EmployeeAbility;
 import com.beckman.services.GenerateAccountNumber;
-import com.beckman.services.UserInfo;
 import com.beckman.services.UserServices;
-import com.beckman.users.Ability;
 import com.beckman.users.Ability.AccountType;
 import com.beckman.users.Customer;
 

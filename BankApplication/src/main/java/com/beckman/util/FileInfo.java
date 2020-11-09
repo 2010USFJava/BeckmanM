@@ -70,6 +70,7 @@ public class FileInfo {
 		try {
 			ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(customerLogFile));
 			UserServices.customerLogin = (Map<String,String>)objIn.readObject();
+			objIn.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -129,6 +130,7 @@ public static final String employeeLogFile = "employeeLogMap.txt";
 		try {
 			ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(employeeLogFile));
 			UserServices.employeeLogin = (Map<String,String>)objIn.readObject();
+			objIn.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -188,6 +190,7 @@ public static final String adminLogFile = "adminLogMap.txt";
 		try {
 			ObjectInputStream objIn = new ObjectInputStream(new FileInputStream(adminLogFile));
 			UserServices.adminLogin = (Map<String,String>)objIn.readObject();
+			objIn.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

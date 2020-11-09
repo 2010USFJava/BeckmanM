@@ -5,7 +5,6 @@ import com.beckman.services.UserInfo;
 import com.beckman.users.Ability;
 import com.beckman.users.Customer;
 import com.beckman.util.LogInfo;
-import com.beckman.users.Ability.AccountType;
 
 public class CustomerAbility implements Ability {
 	Customer cust;

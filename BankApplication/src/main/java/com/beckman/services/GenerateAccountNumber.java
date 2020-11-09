@@ -26,7 +26,7 @@ public class GenerateAccountNumber extends UserInfo {
 	public static Integer findAccountNumber(Integer integer) {
 		if(accountNumbers.contains(integer)) {
 			for(Integer i : accountNumbers) {
-				if(integer.equals(i) && customerList.contains(i)) {
+				if(integer.equals(i) && customerList.equals(i)) {
 					return i;
 				}
 			}
