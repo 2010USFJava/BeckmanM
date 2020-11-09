@@ -1,10 +1,17 @@
 package com.beckman.users;
 
+import java.io.Serializable;
+
 import com.beckman.services.UserInfo;
 import com.beckman.services.UserServices;
-import com.beckman.users.ability.AdminAbility;
+import com.beckman.util.FileInfo;
+import com.beckman.util.LogInfo;
 
-public class Admin {
+public class Admin implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6133701720701910620L;
 	private String firstName;
 	private String lastName;
 	private String username;
@@ -22,6 +29,9 @@ public class Admin {
 		this.password = password;
 		UserInfo.adminList.add(this);
 		UserServices.adminLogin.put(username, password);
+		FileInfo.writeAdminFile(UserInfo.adminList);
+		FileInfo.writeAdminLogFile(UserServices.adminLogin);
+		LogInfo.LogIt("info", "A new admin, " + this.firstName + " " + this.lastName + " has been added to the company!");
 	}
 	public String getFirstName() {
 		return firstName;

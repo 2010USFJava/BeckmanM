@@ -1,10 +1,14 @@
 package com.beckman.services;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.beckman.ability.CustomerAbility;
 import com.beckman.menu.Menu;
 import com.beckman.users.Customer;
+
 
 public class UserServices extends UserInfo {
 
@@ -42,6 +46,8 @@ public class UserServices extends UserInfo {
 					}
 				}
 			}
+			System.out.println("Employee Login Not Found. Please Try Again.");
+			Menu.loginMenu();
 			return false;
 		}
 		
@@ -58,17 +64,10 @@ public class UserServices extends UserInfo {
 					}
 				}
 			}
+			System.out.println("Admin Login Not Found. Please Try Again.");
+			Menu.loginMenu();
 			return false;
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		
 		

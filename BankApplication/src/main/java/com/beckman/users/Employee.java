@@ -1,10 +1,17 @@
 package com.beckman.users;
 
+import java.io.Serializable;
+
 import com.beckman.services.UserInfo;
 import com.beckman.services.UserServices;
-import com.beckman.users.ability.EmployeeAbility;
+import com.beckman.util.FileInfo;
+import com.beckman.util.LogInfo;
 
-public class Employee {
+public class Employee implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2073640157971750844L;
 	private String firstName;
 	private String lastName;
 	private String username;
@@ -21,6 +28,9 @@ public class Employee {
 		this.password = password;
 		UserInfo.employeeList.add(this);
 		UserServices.employeeLogin.put(username, password);
+		FileInfo.writeEmployeeFile(UserInfo.employeeList);
+		FileInfo.writeEmployeeLogFile(UserServices.customerLogin);
+		LogInfo.LogIt("info", "A new employee, " + this.firstName + " " + this.lastName + " has been added to the company!");
 	}
 	public String getFirstName() {
 		return firstName;
