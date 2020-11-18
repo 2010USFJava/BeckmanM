@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 public class LogInfo {
 	static Logger logger = LogManager.getLogger();
+	//static Logger log = Logger.getLogger(LogInfo.class.getName())
 	
 	public static void LogIt(String level, String message) {
 		switch(level) {

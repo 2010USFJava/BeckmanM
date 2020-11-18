@@ -46,6 +46,7 @@ foreign key (acct_id) references account(acct_id) on delete cascade
 );
 
 
-
+select * from logs;
 select * from account;
 select * from customer;
+select * from account_user;

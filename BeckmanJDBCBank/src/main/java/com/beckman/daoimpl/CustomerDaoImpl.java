@@ -128,11 +128,15 @@ public class CustomerDaoImpl implements CustomerDao{
 	}
 
 	@Override
-	public void updateCustomer(Customer cust, long id) throws SQLException {
-		String sql = "select cusername from customer where cid=?";
+	public void updateCustomer(Customer cust, String up) throws SQLException {
+		String sql = "update customer set cusername=?";
+		int ar =0;
 		Connection conn = cf.getConnection();
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setLong(1, id);
+		stmt.setString(1, up);
+		ar= stmt.executeUpdate();
+		cust.setUsername(up);
+		
 		
 		
 		

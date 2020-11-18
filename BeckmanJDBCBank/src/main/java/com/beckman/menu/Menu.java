@@ -220,6 +220,8 @@ public class Menu {
 		System.out.println("\t 2-- Make A Deposit");
 		System.out.println("\t 3-- Make A Withdraw");
 		System.out.println("\t 4-- Create Another Account");
+		System.out.println("\t 5-- Delete Account");
+		System.out.println("\t 6-- Edit Username");
 		System.out.println("\t 0-- Logout");
 		long acctId = 0;
 		Account acct = null;
@@ -332,6 +334,40 @@ public class Menu {
 				break;
 			case 4:
 				applyMenu(custId);
+				break;
+			case 5:
+			try {
+				acctId = bdi.getAccountIdByCustomerId(custId);
+				acct = bdi.getAccountById(acctId);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+				if(acct.getBalance() != 0) {
+					System.out.println("Account Cannot Be Deleted." + "\n" + " Account's Can Only Be Delete If They Are Empty.");
+				}else {
+					try {
+						cdi.deleteCustomerById(acctId);
+						LogInfo.LogIt("info", acctId + " has been deleted");
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+				break;
+			case 6:
+				System.out.println("Enter Your Old Username: ");
+				String old = input.next();
+				Customer cust;
+				try {
+					long id = cdi.getCustomerIdByUsername(old);
+					cust = cdi.getCustomerById(id);
+					System.out.println("Enter Your New Username: ");
+					String user = input.nextLine();
+					cdi.updateCustomer(cust, user);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				
+				
 				break;
 			case 0:
 				System.out.println("Logging Out...");

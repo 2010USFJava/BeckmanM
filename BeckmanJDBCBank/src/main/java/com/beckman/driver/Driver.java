@@ -6,6 +6,7 @@ import org.apache.logging.log4j.core.Logger;
 
 import com.beckman.menu.Menu;
 import com.beckman.util.FileInfo;
+import com.beckman.util.LogInfo;
 
 public class Driver {
 	static {FileInfo.readCustomerFile();}
@@ -15,19 +16,8 @@ public class Driver {
 	
 	public static void main(String[] args) throws SQLException {
 		Menu.mainMenu();
-		//Menu.loginMenu();
-			//Menu.registerMenu();
-			
-//			long custId = 0;
-//			CustomerDaoImpl cdi = new CustomerDaoImpl();
-//			Customer c = new Customer("test", "tester", "test1", "11111");
-//			Customer a = new Customer("NEW", "TEST", "TESTET", "23432");
-//			try {
-//				custId = cdi.insertNewCustomer(a);
-//				System.out.println(custId);
-//			}catch(SQLException e) {
-//				e.printStackTrace();
-//			}
+//		LogInfo.LogIt("debug", "message");
+//		LogInfo.LogIt("info", "log test");
 		
 			
 			

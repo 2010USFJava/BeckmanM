@@ -63,4 +63,12 @@ public class AccountDaoTest {
 		double actualBal = newBal;
 		assertEquals(expectedBal, actualBal, am);
 	}
+	
+	@Test
+	public void tgetAccoungById() {
+		Customer b = new Customer(0, "t", "t", "tt", "ttt");
+		Account a = new Account(0, 0, AccountType.CHECKING, 0);
+		long acctId = 0;
+		acctId = adi.getAccountById(custId);
+	}
 }

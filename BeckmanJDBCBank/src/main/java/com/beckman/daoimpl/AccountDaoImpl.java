@@ -264,8 +264,9 @@ public class AccountDaoImpl implements AccountDao{
 	public List<Account> getAllAccountsFromCust() throws SQLException {
 		List<Account> acctList = new ArrayList<Account>();
 		Connection conn = cf.getConnection();
-		String sql = "select * from account_user";
-		Statement stmt = conn.createStatement();
+		String sql = "select * from customer right join customer.cid on account.acct_id where cid=?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		//stmt.setLong(1, id);
 		ResultSet rs = stmt.executeQuery(sql);
 		Account c = null;
 		while(rs.next()) {
