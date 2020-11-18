@@ -19,10 +19,11 @@ public interface AccountDao {
 	public void updateAccount(Account acct, int id) throws SQLException;
 	public void viewAccount(int id) throws SQLException;
 	public void multipleDeposits() throws SQLException;
+	public List<Account> getAllAccountsFromCust() throws SQLException;
 	
 	public double viewBalance(Account acct, AccountType acctType, long custId, long acctId) throws SQLException;
-	public double deposit(Account acct, AccountType acctType, double amount, long custId) throws SQLException;
-	public double withdraw(Account acct, AccountType acctType, double amount, long custId) throws SQLException;
+	public double deposit(Account acct, double amount, long acctId) throws SQLException;
+	public double withdraw(Account acct, AccountType acctType, double amount, long custId, long acctId) throws SQLException;
 	public void transfer(AccountType acctType, AccountType acctType2, double amount, long custId);
 	void displayAccount(ResultSet rs) throws SQLException;
 }

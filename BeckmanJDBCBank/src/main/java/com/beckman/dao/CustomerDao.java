@@ -13,6 +13,7 @@ public interface CustomerDao {
 	public Customer getCustomerById(long custId) throws SQLException;
 	public long insertNewCustomer(Customer cust) throws SQLException;
 	public int deleteCustomer(String user) throws SQLException;
-	public void updateCustomer(Customer cust, int id) throws SQLException;
+	public int deleteCustomerById(long id) throws SQLException;
+	public void updateCustomer(Customer cust, long id) throws SQLException;
 	void displayCustomer(ResultSet rs) throws SQLException;
 }

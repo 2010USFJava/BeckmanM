@@ -15,15 +15,20 @@ import com.beckman.util.ConnFactory;
 
 public class CustomerDaoImpl implements CustomerDao{
 	public static ConnFactory cf = ConnFactory.getInstance();
-	List<Customer> customerList = new ArrayList<Customer>();
+	
 
 	@Override
 	public List<Customer> getAllCustomers() throws SQLException {
+		List<Customer> customerList = new ArrayList<Customer>();
 		Connection conn = cf.getConnection();
-		String sql = "select  cid, cfirst_name, clast_name from customer";
+		String sql = "select * from customer";
 		Statement stmt = conn.createStatement();
 		ResultSet rs = stmt.executeQuery(sql);
-		displayCustomer(rs);
+		Customer c = null;
+		while(rs.next()) {
+			c = new Customer(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
+			customerList.add(c);
+		}
 		return customerList;
 	}
 	
@@ -85,22 +90,24 @@ public class CustomerDaoImpl implements CustomerDao{
 	@Override
 	public long insertNewCustomer(Customer cust) throws SQLException {
 		
-		String sql = "insert into customer values (DEFAULT,?,?,?,?,?)";
+		String sql = "insert into customer values (DEFAULT,?,?,?,?)";
 			Connection conn = cf.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);//RETURN_GENERATED_KEYS
 			stmt.setString(1, cust.getFirstName());
 			stmt.setString(2, cust.getLastName());
 			stmt.setString(3, cust.getUsername());
 			stmt.setString(4, cust.getPassword());
-		///	stmt.setInt(5, cust.getAcctNum());
 			
 			long custId = 0;
 			
 			int affectedRows = stmt.executeUpdate();
+			Customer c = null;
 			if(affectedRows > 0) {
 			ResultSet rs = stmt.getGeneratedKeys();
 					if(rs.next()) {
+						//c = new Customer(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
 						custId = rs.getLong(1);
+						return custId;
 					}	
 			}
 			return custId;
@@ -121,9 +128,12 @@ public class CustomerDaoImpl implements CustomerDao{
 	}
 
 	@Override
-	public void updateCustomer(Customer cust, int id) throws SQLException {
-		// update username??
-		//use transaction to update balance stuff??
+	public void updateCustomer(Customer cust, long id) throws SQLException {
+		String sql = "select cusername from customer where cid=?";
+		Connection conn = cf.getConnection();
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setLong(1, id);
+		
 		
 		
 	}
@@ -131,11 +141,13 @@ public class CustomerDaoImpl implements CustomerDao{
 	@Override
 	public void displayCustomer(ResultSet rs) throws SQLException {
 		while(rs.next()) {
-			new Customer(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
-			System.out.println(rs.getString("cfirst_name") 
-					+ "\t" + rs.getString("clast_name")
-					+ "\t" + rs.getString("cusername") 
-					+ "\t" + rs.getString("cpassword"));//probably dont display 
+			Customer c = new Customer(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5));
+			System.out.println(c.toString());
+//			System.out.println(rs.getLong("cid")
+//					+ "\t" + rs.getString("cfirst_name") 
+//					+ "\t" + rs.getString("clast_name")
+//					+ "\t" + rs.getString("cusername") 
+//					+ "\t" + rs.getString("cpassword"));//probably dont display 
 		}
 		
 	}
@@ -155,6 +167,19 @@ public class CustomerDaoImpl implements CustomerDao{
 			}
 		}
 		return 0;
+	}
+
+	@Override
+	public int deleteCustomerById(long id) throws SQLException {
+		String sql = "delete from customer where cid=?";
+		int affectedRows = 0;
+		
+		Connection conn = cf.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setLong(1, id);
+			affectedRows = stmt.executeUpdate();
+	
+		return affectedRows;
 	}
 
 

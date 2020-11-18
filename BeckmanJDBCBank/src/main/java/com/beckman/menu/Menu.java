@@ -1,8 +1,8 @@
  package com.beckman.menu;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
-
 
 import com.beckman.daoimpl.AccountDaoImpl;
 import com.beckman.daoimpl.AdminDaoImpl;
@@ -130,14 +130,14 @@ public class Menu {
 				LogInfo.LogIt("info", custId + " cretaed a " + AccountType.CHECKING + " !" );
 				break;
 			case 2:
-				acct = new Account(acctId, custId, AccountType.SAVING, 0);
+				acct = new Account(acctId, custId, AccountType.SAVINGS, 0);
 			try {
 				bdi.insertNewAccount(acct, custId);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 				System.out.println("You Successfully Applied For A Saving Account");
-				LogInfo.LogIt("info", custId + " cretaed a " + AccountType.SAVING + " !" );
+				LogInfo.LogIt("info", custId + " cretaed a " + AccountType.SAVINGS + " !" );
 				break;
 			case 0:
 				mainMenu();
@@ -171,10 +171,10 @@ public class Menu {
 						custId = cdi.getCustomerIdByUsername(custUsername);
 						Customer cust = cdi.getCustomerById(custId);
 						System.out.println("Login Was Successful");
+						LogInfo.LogIt("info", custId + " has logged in.");
 						accountMenu(custId);
 					} else {
 						System.out.println("Invalid Username And/Or Password. Please Try Again.");
-						LogInfo.LogIt("info", custId + " has logged in.");
 						loginMenu();
 					}
 				} catch (SQLException e) {
@@ -219,20 +219,10 @@ public class Menu {
 		System.out.println("\t 1-- View Account Balance");
 		System.out.println("\t 2-- Make A Deposit");
 		System.out.println("\t 3-- Make A Withdraw");
-		System.out.println("\t 4-- Make A Transfer");
-		System.out.println("\t 5-- Add Another Account");//add option
+		System.out.println("\t 4-- Create Another Account");
 		System.out.println("\t 0-- Logout");
 		long acctId = 0;
-		Account acct;
-		try {
-			acctId = bdi.getAccountIdByCustomerId(custId);
-			acct = bdi.getAccountById(acctId);
-			//getAccountTypeByCustomerId
-			//getAccountBalanceByacctId
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-		//acct = new Account(acctId, custId, AccountType.CHECKING, 0);
+		Account acct = null;
 		
 		int custInput = input.nextInt();
 		switch(custInput) {
@@ -240,22 +230,21 @@ public class Menu {
 				System.out.println("Please Select Which Account Balance You Would Like to View");
 				System.out.println("\t1-- Type 1 To View Checking Account Balance");
 				System.out.println("\t2-- Type 2 To View Saving Account Balance");
-			//	System.out.println("\t3-- Type 3 To View Joint Account Balance"); //if they have joint account
 				System.out.println("\t0-- Type 0 To Go Back To Account Menu");
 				if(input.nextInt() == 1) {
-						acct = new Account(acctId, custId, AccountType.CHECKING, 0);
 					try {
+						acctId = bdi.getAccountIdByCustomerId(custId);
+						acct = bdi.getAccountById(acctId);
 						double bal = bdi.viewBalance(acct, AccountType.CHECKING, custId, acctId);
-						//acct.setBalance(bal);
 						System.out.println(acctId + " has a balance of " + bal);
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
 				}else if(input.nextInt() == 2) {
-					acct = new Account(acctId, custId, AccountType.CHECKING, 0);
 					try {
-						bdi.viewBalance(acct, AccountType.SAVING, custId, acctId);
-						double bal = acct.getBalance();
+						acctId = bdi.getAccountIdByCustomerId(custId);
+						acct = bdi.getAccountById(acctId);
+						double bal = bdi.viewBalance(acct, AccountType.SAVINGS, custId, acctId);
 						System.out.println(acctId + " has a balance of " + bal);
 					} catch (SQLException e) {
 						e.printStackTrace();
@@ -270,32 +259,36 @@ public class Menu {
 				System.out.println("Please Select Which Account You Would Like To Deposit Into: ");
 				System.out.println("\t1-- Type 1 Checking Account");
 				System.out.println("\t2-- Type 2 Saving Account");
-				//System.out.println("\t3-- Type 3 Joint Account "); //if they have joint account
 				System.out.println("\t0-- Type 0 To Go Back To Account Menu");
 				if(input.nextInt() == 1) {
 					acct = new Account(acctId, custId, AccountType.CHECKING, 0);
 					System.out.println("Please Type The Amount You Want To Deposit: ");
 					double amountChe = input.nextDouble();
 					try {
-						bdi.deposit(acct,AccountType.CHECKING, amountChe, custId);
-						System.out.println("You Successfully Deposited " + amountChe + " Into Your " + AccountType.CHECKING);
-						LogInfo.LogIt("info", "AccountId " + acctId + " had deposited " + amountChe + " into their " + AccountType.CHECKING);
+						acctId = bdi.getAccountIdByCustomerId(custId);
+						acct = bdi.getAccountById(acctId);
+						double bal = bdi.deposit(acct, amountChe, acctId);
+						//System.out.println("You Successfully Deposited " + amountChe + " Into Your " + AccountType.CHECKING);
+						//LogInfo.LogIt("info", "AccountId " + acctId + " had deposited " + amountChe + " into their " + AccountType.CHECKING);
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
 				}else if(input.nextInt() == 2) {
-					acct = new Account(acctId, custId, AccountType.SAVING, 0);
+					acct = new Account(acctId, custId, AccountType.SAVINGS, 0);
 					System.out.println("Please Type The Amount You Want To Deposit: ");
 					double amountSav = input.nextDouble();
 					try {
-						bdi.deposit(acct, AccountType.SAVING, amountSav, custId);
+						acctId = bdi.getAccountIdByCustomerId(custId);
+						acct = bdi.getAccountById(acctId);
+					double bal = bdi.deposit(acct, amountSav, acctId);
+					//System.out.println("You Successfully Depoited " + amountSav + " Into Your " + AccountType.SAVINGS);
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
 				}else if(input.nextInt() == 0) {
 					accountMenu(custId);
 				}else {
-					//System.out.println("Invalid Entry. Please Try Again.");
+					System.out.println("Invalid Entry. Please Try Again.");
 					accountMenu(custId);
 				}
 				accountMenu(custId);
@@ -304,23 +297,28 @@ public class Menu {
 				System.out.println("Please Select Which Account You Would Like To Withdraw From: ");
 				System.out.println("\t 1-- Checking Account");
 				System.out.println("\t 2-- Saving Account");
-			//	System.out.println("\t 3-- Joint Account "); //if they have joint account
 				System.out.println("\t 0-- Go Back To Account Menu");
 				if(input.nextInt() == 1) {
 					acct = new Account(acctId, custId, AccountType.CHECKING, 0);
 					System.out.println("Please Type The Amount You Want To Withdraw: ");
 					double amountChe = input.nextDouble();
 					try {
-						bdi.withdraw(acct, AccountType.CHECKING, amountChe, custId);
+						acctId = bdi.getAccountIdByCustomerId(custId);
+						acct = bdi.getAccountById(acctId);
+						double bal = bdi.withdraw(acct, AccountType.CHECKING, amountChe, custId, acctId);
+					//	System.out.println("You Successfully Withdrew " + amountChe + " From Your " + AccountType.CHECKING);
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
 				}else if(input.nextInt() == 2) {
-					acct = new Account(acctId, custId, AccountType.SAVING, 0);
+					acct = new Account(acctId, custId, AccountType.SAVINGS, 0);
 					System.out.println("Please Type The Amount You Want To Wtihdraw: ");
 					double amountSav = input.nextDouble();
 					try {
-						bdi.withdraw(acct, AccountType.SAVING, amountSav, custId);
+						acctId = bdi.getAccountIdByCustomerId(custId);
+						acct = bdi.getAccountById(acctId);
+						double bal = bdi.withdraw(acct, AccountType.SAVINGS, amountSav, custId, acctId);
+						//System.out.println("You Successfully Withdrew " + amountSav + " From Your " + AccountType.SAVINGS);
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
@@ -333,36 +331,11 @@ public class Menu {
 				accountMenu(custId);
 				break;
 			case 4:
-				System.out.println("Please Select Which Account You Would Like To Transfer Money From: ");
-				System.out.println("\t1-- Type 1 Checking Account");
-				System.out.println("\t2-- Type 2 Saving Account");
-			//	System.out.println("\t3-- Type 3 Joint Account "); //if they have joint account
-				System.out.println("\t0-- Type 0 To Go Back To Account Menu");
-				int transferFrom = input.nextInt();
-
-				System.out.println("Please Select Which Account You Would Like To Transfer Into: ");
-				System.out.println("\t1-- Type 1 Checking Account");
-				System.out.println("\t2-- Type 2 Saving Account");
-			//	System.out.println("\t3-- Type 3 Joint Account "); //if they have joint account
-				System.out.println("\t0-- Type 0 To Go Back To Account Menu");
-				int transferInto = input.nextInt();
-				
-				System.out.println("Please Enter The Amount You Would Like To Transfer: ");
-				double transferAmount = input.nextDouble();
-				
-				if(transferFrom == 1 && transferInto == 2) {
-					bdi.transfer(AccountType.CHECKING, AccountType.SAVING, transferAmount, custId);
-				
-				}else if(transferFrom == 2 && transferInto == 1) {
-					bdi.transfer(AccountType.SAVING, AccountType.CHECKING, transferAmount, custId);
-				}else {
-					System.out.println("Invalid Entry. Please Try Again.");
-					accountMenu(custId);
-				}
-				accountMenu(custId);
+				applyMenu(custId);
 				break;
 			case 0:
 				System.out.println("Logging Out...");
+				LogInfo.LogIt("info", custId + " had logged out.");
 				mainMenu();
 				break;
 			default:
@@ -380,72 +353,94 @@ public class Menu {
 	public static void adminMenu() {
 		System.out.println("			Admin Menu				");
 		System.out.println("\nSelect From The Following Options: ");
-		System.out.println("\t 1-- View Customer Account Information");
-		System.out.println("\t 2-- Deposit Into Customer Account");
-		System.out.println("\t 3-- Withdraw From Customer Account");
-		System.out.println("\t 4-- Transfer From Customer Account");
+		System.out.println("\t 1-- View All Customers And Accounts");//fix
+		System.out.println("\t 2-- View Customer Account Information");
+		System.out.println("\t 3-- Deposit Into Customer Account");
+		System.out.println("\t 4-- Withdraw From Customer Account");
 		System.out.println("\t 5-- Delete A Customer Account");
-		System.out.println("\t 6-- Create A New Employee");
 		System.out.println("\t 0-- Logout");
 		
 		int adSelect = input.nextInt();
 		switch(adSelect) {
-			case 1: 
-				//get account by username
+			case 1:
+			try {
+				List<Customer> cList = cdi.getAllCustomers();
+				System.out.println(cList);
+			} catch (SQLException e2) {
+				e2.printStackTrace();
+			}
+				break;
+			case 2: 
 				System.out.println("Enter The Customer ID Of The Account You Want To View: ");
 				Long id = input.nextLong();
 				try {
-					bdi.getAccountById(id);
+					List<Account> acctList = bdi.getAllAccountsFromCust();//does it work?
+					System.out.println(acctList);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 				adminMenu();
 				break;
-			case 2:
+			case 3:
 				System.out.println("Please Enter The Customer ID For Deposit: ");
 				long cId = input.nextLong();
 				System.out.println("Enter The Deposit Amount: ");
 				double amount = input.nextDouble();
 				long acctId;
 				Account acct;
-				AccountType acctType = AccountType.CHECKING;
+				AccountType acctType;
 				try {
 					acctId = bdi.getAccountIdByCustomerId(cId);
 					acct = bdi.getAccountById(acctId);
-					//getaccttype
-					bdi.deposit(acct, acctType, amount, cId);
+					acctType = bdi.getAcctTypeByAcctId(acctId);
+					bdi.deposit(acct, amount, acctId);
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
 				adminMenu();
 				break;
-			case 3:
-				System.out.println("Please Enter The Customer ID For Deposit: ");
+			case 4:
+				System.out.println("Please Enter The Customer ID For Withdraw: ");
 				long cId2 = input.nextLong();
-				System.out.println("Enter The Deposit Amount: ");
+				System.out.println("Enter The Withdraw Amount: ");
 				double amount2 = input.nextDouble();
 				long acctId2;
 				Account acct2;
-				AccountType acctType2 = AccountType.CHECKING;
+				AccountType acctType2;
 			try {
 				acctId2 = bdi.getAccountIdByCustomerId(cId2);
 				acct2 = bdi.getAccountById(acctId2);
-				//getaccttype
-				bdi.deposit(acct2, acctType2, amount2, cId2);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-				adminMenu();
-				break;
-			case 4:
-			try {
-				adi.transferFromCustomer();
+				acctType2 = bdi.getAcctTypeByAcctId(acctId2);
+				bdi.deposit(acct2, amount2, acctId2);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 				adminMenu();
 				break;
 			case 5:
+				System.out.println("Please Enter The Customer Id To Delete: ");
+				long id3 = input.nextLong();
+				Customer cust;
+				try {
+					cust = cdi.getCustomerById(id3);
+					System.out.println(cust.toString());
+					System.out.println("Would You Like To Delete This Customer?");
+					String del =input.next();
+					if(del.equalsIgnoreCase("y")) {
+						cdi.deleteCustomerById(id3);
+						System.out.println("Customer" + "\n"  + cust.toString() + "Was Deleted");
+						adminMenu();
+					}else if(del.equalsIgnoreCase("n")){
+						System.out.println("Customer " + cust.toString() + " Was Not Deleted");
+						adminMenu();
+					}else {
+						System.out.println("Invalid Entry. Please Try Again");
+						adminMenu();
+					}
+					LogInfo.LogIt("info", cust.toString() + " Was Deleted");
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 			try {
 				adi.deleteCustomer();
 			} catch (SQLException e) {
@@ -453,12 +448,9 @@ public class Menu {
 			}
 				adminMenu();
 				break;
-			case 6:
-				//AdminAbility.createNewEmployee();
-				adminMenu();
-				break;
 			case 0:
 				System.out.println("Logging Out...");
+				LogInfo.LogIt("info", "Admin had logged out.");
 				mainMenu();
 				break;
 			default:

@@ -39,7 +39,7 @@ public class Customer implements Serializable {
 	//	GenerateAccountNumber.accountNumbers.contains(accountNumber);
 //		FileInfo.writeCustomerFile(UserInfo.customerList);
 //	FileInfo.writeCustomerLogFile(UserServices.customerLogin);
-		LogInfo.LogIt("info", "A new customer, " + this.firstName + " " + this.lastName + " has created a new account!");
+	//	LogInfo.LogIt("info", "A new customer, " + this.firstName + " " + this.lastName + " has created a new account!");
 	}
 	
 
@@ -88,8 +88,11 @@ public class Customer implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Customer [custId=" + custId + ", firstName=" + firstName + ", lastName=" + lastName + ", username="
-				+ username + ", password=" + password +  "]";
+		return "Customer [custId=" + custId + 
+				"\n" + "firstName=" + firstName + 
+				"\n" + "lastName=" + lastName + 
+				"\n" + "username=" + username +
+				"\n" + "password=" + password +  "]" +"\n" +"\n";
 	}
 
 

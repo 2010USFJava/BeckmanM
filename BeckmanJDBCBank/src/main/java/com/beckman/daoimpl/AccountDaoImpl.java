@@ -8,10 +8,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.beckman.customexcept.NegativeAmountException;
 import com.beckman.dao.AccountDao;
 import com.beckman.users.Ability.AccountType;
 import com.beckman.users.Account;
-import com.beckman.users.Customer;
 import com.beckman.util.ConnFactory;
 import com.beckman.util.LogInfo;
 
@@ -42,6 +42,7 @@ public class AccountDaoImpl implements AccountDao{
 		}
 		return a;
 	}
+	
 	@Override
 	public long insertNewAccount(Account acct, long id) throws SQLException {
 		String enumType = acct.getAcctType().toString();
@@ -82,80 +83,81 @@ public class AccountDaoImpl implements AccountDao{
 	}
 	@Override
 	public double viewBalance(Account acct, AccountType acctType, long custId, long acctId) throws SQLException {
-		String sql = "select * from account where cid=?";
+		String sql = "select * from account where acct_id=?";
 		Connection conn = cf.getConnection();
 		PreparedStatement stmt;
 		stmt = conn.prepareStatement(sql);
-		stmt.setDouble(1, custId);
+		stmt.setLong(1, acctId);
 		ResultSet rs = stmt.executeQuery();
-		Account a;
+		Account a = null;
 		while(rs.next()) {
 			a = new Account(rs.getLong(1), rs.getLong(2), AccountType.valueOf(rs.getString(3)), rs.getDouble(4));
-			double 	balance = rs.getDouble(4);
-			return balance;
+			//double 	balance = rs.getDouble(4);
 		}	
-		double balance = acct.getBalance();
+		//double bal = a.getBalance();
 		if(acctType.equals(AccountType.CHECKING)) {
-			return balance;
-		}else if(acctType.equals(AccountType.SAVING)) {
-//			acct.setBalance(balance);
-			return balance;
+			return a.getBalance();
+		}else if(acctType.equals(AccountType.SAVINGS)) {
+			return a.getBalance();
+		}else {
+			System.out.println("Invalid Entry. Please Try Again.");
 		}
 		return 0;
 		
 	}
 	@Override
-	public double deposit(Account acct, AccountType acctType, double amount, long custId) throws SQLException {
-		String sql = "select * from account where cid=?";
+	public double deposit(Account acct, double amount, long acctId) throws SQLException {
+		String sql = "select * from account where acct_id=?";
 		Connection conn = cf.getConnection();
-		String enumType = acct.getAcctType().toString();
 		PreparedStatement stmt;
 			stmt = conn.prepareStatement(sql);
-			stmt.setDouble(1, custId);
+			stmt.setLong(1, acctId);
 			ResultSet rs = stmt.executeQuery();
-			Account a;
+			Account a = null;
 			while(rs.next()) {
 				a = new Account(rs.getLong(1), rs.getLong(2), AccountType.valueOf(rs.getString(3)), rs.getDouble(4));
-			double 	b =  a.getBalance();
-			return b;
 			}	
-		double balance = acct.getBalance();
+		double balance = a.getBalance();
 		double updateBal = 0;
-		if(acctType.equals(AccountType.CHECKING)) {
-			if(balance >= 0) {
+		if(a.getAcctType().equals(AccountType.CHECKING)) {
+				if(balance >= 0) {
+					//throw new NegativeAmountException();
 				updateBal = balance + amount;
-				acct.setBalance(updateBal);
-				LogInfo.LogIt("info", "Account number " + acct.getCustId()  +  " Successfully Deposited " + amount + " Into " + acctType );
-				System.out.println("You Successfully Deposited " + amount + " Into Your " + acctType);
+				LogInfo.LogIt("info", "Account number " + a.getAcctId()  +  " Successfully Deposited " + amount + " Into " + a.acctType );
+				System.out.println("You Successfully Deposited " + amount + " Into Your " + a.acctType);
+			}else {
+				System.out.println("Invalid Entry. Please Try Again.");
 			}
-		}else if(acctType.equals(AccountType.SAVING)) {
-			if(balance >= 0) {
-				updateBal = balance + amount;
-				acct.setBalance(updateBal);
-				LogInfo.LogIt("info", "Account number " + acct.getCustId()  +  " Successfully Deposited " + amount + " Into " + acctType );
-				System.out.println("You Successfully Deposited " + amount + " Into Your " + acctType);
-			}
+		}else if(a.getAcctType().equals(AccountType.SAVINGS)) { 
+				if(balance >= 0) {
+					updateBal = balance + amount;
+					LogInfo.LogIt("info", "Account number " + a.getAcctId()  +  " Successfully Deposited " + amount );
+					System.out.println("You Successfully Deposited " + amount + " Into Your " + a.acctType);
+				}else {
+					System.out.println("Invalid Entry. Please Try Again.");
+				}
 		}else {
 			System.out.println("Invalid Entry. Please Try Again.");
 		}
-		String sql2= "update account set balance=balance+? where cid=?";
+	
+		String sql2= "update account set balance=balance+? where acct_id=?";
 		int affectedRows = 0;
 		Connection conn2 = cf.getConnection();
 		PreparedStatement stmt2 = conn2.prepareStatement(sql2);
-			stmt.setDouble(1, amount);
-			stmt.setLong(2, custId);
-			affectedRows = stmt.executeUpdate();
+			stmt2.setDouble(1, amount);
+			stmt2.setLong(2, a.getAcctId());
+			affectedRows = stmt2.executeUpdate();
 		return affectedRows;
-		
 	}
+	
 	@Override
-	public double withdraw(Account acct, AccountType acctType, double amount, long custId) throws SQLException{
-		String sql = "select * from account where cid=?";
+	public double withdraw(Account acct, AccountType acctType, double amount, long custId, long acctId) throws SQLException{
+		String sql = "select * from account where acct_id=?";
 		Connection conn = cf.getConnection();
 		String enumType = acct.getAcctType().toString();
 		PreparedStatement stmt;
 			stmt = conn.prepareStatement(sql);
-			stmt.setDouble(1, custId);
+			stmt.setLong(1, acctId);
 			ResultSet rs = stmt.executeQuery();
 			Account a;
 			while(rs.next()) {
@@ -172,24 +174,28 @@ public class AccountDaoImpl implements AccountDao{
 					acct.setBalance(updateBal);
 					LogInfo.LogIt("info", acct.getCustId() + " Successfully Withdrew " + amount + " Into " + acctType );
 					System.out.println("You Successfully Withdrew " + amount + " From Your " + acctType);
+				}else {
+					System.out.println("Insufficient Funds");
 				}
-			}else if(acctType.equals(AccountType.SAVING)) {
+			}else if(acctType.equals(AccountType.SAVINGS)) {
 				if(balance >= amount) {
 					updateBal = balance - amount;
 					acct.setBalance(updateBal);
 					LogInfo.LogIt("info", acct.getCustId() + " Successfully Withdrew " + amount + " Into " + acctType );
 					System.out.println("You Successfully Withdrew " + amount + " From Your " + acctType);
+				}else {
+					System.out.println("Insufficient Funds");
 				}
 			}else {
 				System.out.println("Invalid Entry. Please Try Agian.");
 			}
-		String sql2 = "update account set balance=? where cid=?";
+		String sql2 = "update account set balance=? where acct_id=?";
 		int affectedRows = 0;
 		Connection conn2 = cf.getConnection();
 		PreparedStatement stmt2;
 			stmt2 = conn2.prepareStatement(sql2);
 			stmt2.setDouble(1, amount);
-			stmt2.setLong(2, custId);
+			stmt2.setLong(2, acctId);
 			affectedRows = stmt2.executeUpdate();
 		return affectedRows;
 		
@@ -207,19 +213,7 @@ public class AccountDaoImpl implements AccountDao{
 	}
 	@Override
 	public void multipleDeposits() throws SQLException {
-		String sql = "begin; update account set balance=balance-? where cusername=? savepoint my_savpoint;"
-				+ "update account set balance=balance+? where cusername=? commit;";
-//		BEGIN;
-//		UPDATE accounts SET balance = balance - 100.00
-//		    WHERE name = 'Alice';
-//		SAVEPOINT my_savepoint;
-//		UPDATE accounts SET balance = balance + 100.00
-//		    WHERE name = 'Bob';
-//		-- oops ... forget that and use Wally's account
-//		ROLLBACK TO my_savepoint;
-//		UPDATE accounts SET balance = balance + 100.00
-//		    WHERE name = 'Wally';
-//		COMMIT;
+
 		
 	}
 	@Override
@@ -260,11 +254,27 @@ public class AccountDaoImpl implements AccountDao{
 		AccountType at = null;
 		if(rs!=null) {
 			while(rs.next()) {
-				at = AccountType.valueOf(rs.getString(3));
+				at = AccountType.valueOf(rs.getString(1));
 				return at;
 			}
 		}
 		return null;
+	}
+	@Override
+	public List<Account> getAllAccountsFromCust() throws SQLException {
+		List<Account> acctList = new ArrayList<Account>();
+		Connection conn = cf.getConnection();
+		String sql = "select * from account_user";
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery(sql);
+		Account c = null;
+		while(rs.next()) {
+			c = new Account(rs.getLong(1), rs.getLong(2), AccountType.valueOf(rs.getString(3)), rs.getDouble(4));
+			acctList.add(c);
+			
+		}
+		
+		return acctList;
 	}
 
 	

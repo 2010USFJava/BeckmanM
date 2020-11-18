@@ -1,8 +1,8 @@
 package com.beckman.users;
 
-import com.beckman.users.Ability.AccountType;
 
-public class Account {
+
+public class Account implements Ability{
 	private long acctId;
 	private long custId;
 	private double balance;

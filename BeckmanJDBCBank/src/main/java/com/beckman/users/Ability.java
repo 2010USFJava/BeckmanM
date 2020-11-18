@@ -5,7 +5,7 @@ public interface Ability {
 	public static double amount = 0;
 	public enum AccountType{
 		CHECKING("CHECKING"),
-		SAVING("SAVINGS");
+		SAVINGS("SAVINGS");
 		private String aType;
 		private AccountType(String string) {
 			this.aType = string;
