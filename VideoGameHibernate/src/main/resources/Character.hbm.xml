@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.revature.models">
+	<class name="Character" table="characters">
+		<id name="id" type="int" column="c_id">
+			<generator class="identity"></generator>
+		</id>
+		<property name="charName" type="string" column="c_name"></property>
+		<property name="charMotto" type="string" column="c_motto"></property>
+		<property name="franny" type=""></property>
+		<many-to-one name="franny" fetch="join"></many-to-one>
+	</class>
+	
+	
+
+</hibernate-mapping>
